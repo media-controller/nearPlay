@@ -1,3 +1,16 @@
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+
+
 # Built application files
 *.apk
 *.ap_
