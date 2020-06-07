@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_party"
+    app:startDestination="@id/fragment_party">
+
+    <fragment
+        android:id="@+id/fragment_party"
+        android:name="media.controller.nearplay.ui.Party"
+        android:label="Party"
+        tools:layout="@layout/fragment_party">
+        <action
+            android:id="@+id/action_fragment_party_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="media.controller.nearplay.AlbumFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+</navigation>

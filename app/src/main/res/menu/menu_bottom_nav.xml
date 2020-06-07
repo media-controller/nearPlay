@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@id/navigation_party"
+        android:contentDescription="@string/cd_party"
+        android:icon="@drawable/ic_settings_input_antenna_black_24dp"
+        android:title="@string/party" />
+    <item
+        android:id="@id/navigation_queue"
+        android:contentDescription="@string/cd_queue"
+        android:icon="@drawable/ic_queue_music_black_24dp"
+        android:title="@string/queue" />
+    <item
+        android:id="@id/navigation_search"
+        android:contentDescription="@string/cd_search"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:title="@string/search" />
+</menu>
