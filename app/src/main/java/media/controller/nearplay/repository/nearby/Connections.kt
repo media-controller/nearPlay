@@ -1,12 +1,18 @@
 package media.controller.nearplay.repository.nearby
 
+import android.content.Context
 import com.google.android.gms.nearby.Nearby
-import media.controller.nearplay.Configuration
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object Connections {
+@Singleton
+class Connections @Inject constructor(
+    @ApplicationContext private val context: Context
+) {
 
     fun getClient() =
-        Nearby.getConnectionsClient(Configuration.context)
+        Nearby.getConnectionsClient(context)
 
 //    private suspend fun startAdvertising(strategy: Strategy) {
 //        val advertisingOptions = AdvertisingOptions.Builder().setStrategy(strategy).build()

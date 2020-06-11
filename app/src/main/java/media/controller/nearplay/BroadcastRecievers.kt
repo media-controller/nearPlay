@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 private const val SPOTIFY_PACKAGE = "com.spotify.music"
@@ -13,6 +14,7 @@ private const val PLAYBACK_STATE_CHANGED = "$SPOTIFY_PACKAGE.playbackstatechange
 private const val QUEUE_CHANGED = "$SPOTIFY_PACKAGE.queuechanged"
 private const val METADATA_CHANGED = "$SPOTIFY_PACKAGE.metadatachanged"
 
+@AndroidEntryPoint
 @Suppress("SpellCheckingInspection")
 class SpotifyBroadcastReceiver : BroadcastReceiver() {
 

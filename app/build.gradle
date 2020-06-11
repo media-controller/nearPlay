@@ -4,10 +4,11 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
-    buildFeatures{
+    buildFeatures {
         dataBinding = true
     }
     defaultConfig {
@@ -50,17 +51,18 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    implementation "com.google.dagger:hilt-android:2.28-alpha"
+    kapt "com.google.dagger:hilt-android-compiler:2.28-alpha"
+    implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha01'
+    kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha01'
+
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-
-//    kapt "androidx.room:room-compiler:$rootProject.roomVersion"
-//    kapt "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$rootProject.kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$rootProject.coroutinesVersion"
-
 
     implementation "androidx.appcompat:appcompat:$rootProject.supportLibraryVersion"
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintLayoutVersion"
@@ -75,6 +77,8 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:$rootProject.recyclerViewVersion"
     implementation 'androidx.palette:palette:1.0.0'
     implementation "androidx.palette:palette-ktx:1.0.0"
+    implementation "androidx.paging:paging-runtime-ktx:3.0.0-alpha01"
+
 //    implementation "androidx.room:room-runtime:$rootProject.roomVersion"
 //    implementation "androidx.work:work-runtime-ktx:$rootProject.workVersion"
 
@@ -124,9 +128,27 @@ dependencies {
     implementation files('libs/spotify/auth-lib/spotify-auth-release-1.2.1.aar')
     implementation 'com.google.code.gson:gson:2.8.6'
 
-//    implementation files('libs/spotify-player-24-noconnect-2.20b.aar')
-    implementation 'com.adamratzman:spotify-api-kotlin:3.0.0-rc.5'
+//  implementation files('libs/spotify-player-24-noconnect-2.20b.aar')
+    implementation 'com.adamratzman:spotify-api-kotlin:3.1.0'
 
     //Store
-    //implementation 'com.dropbox.mobile.store:store4:4.0.0-SNAPSHOT'
+    implementation 'com.dropbox.mobile.store:store4:4.0.0-alpha06'
+
+//  Platform FlowBindings
+    implementation "io.github.reactivecircus.flowbinding:flowbinding-android:${flowbindingVersion}"
+//  AndroidX FlowBindings
+    implementation "io.github.reactivecircus.flowbinding:flowbinding-activity:${flowbindingVersion}"
+    implementation "io.github.reactivecircus.flowbinding:flowbinding-appcompat:${flowbindingVersion}"
+    implementation "io.github.reactivecircus.flowbinding:flowbinding-core:${flowbindingVersion}"
+    implementation "io.github.reactivecircus.flowbinding:flowbinding-drawerlayout:${flowbindingVersion}"
+    implementation "io.github.reactivecircus.flowbinding:flowbinding-lifecycle:${flowbindingVersion}"
+    implementation "io.github.reactivecircus.flowbinding:flowbinding-navigation:${flowbindingVersion}"
+    implementation "io.github.reactivecircus.flowbinding:flowbinding-preference:${flowbindingVersion}"
+    implementation "io.github.reactivecircus.flowbinding:flowbinding-recyclerview:${flowbindingVersion}"
+    implementation "io.github.reactivecircus.flowbinding:flowbinding-swiperefreshlayout:${flowbindingVersion}"
+    implementation "io.github.reactivecircus.flowbinding:flowbinding-viewpager:${flowbindingVersion}"
+    implementation "io.github.reactivecircus.flowbinding:flowbinding-viewpager2:${flowbindingVersion}"
+//  Material Components FlowBindings
+    implementation "io.github.reactivecircus.flowbinding:flowbinding-material:${flowbindingVersion}"
+
 }

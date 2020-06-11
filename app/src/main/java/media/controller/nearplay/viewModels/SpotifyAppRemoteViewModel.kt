@@ -1,22 +1,30 @@
 package media.controller.nearplay.viewModels
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import androidx.palette.graphics.Palette
 import com.spotify.protocol.types.Image
 import com.spotify.protocol.types.LibraryState
 import com.spotify.protocol.types.PlayerState
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import media.controller.nearplay.repository.spotify.AppRemote
-import media.controller.nearplay.repository.spotify.AppRemote.getLibraryState
+import media.controller.nearplay.repository.spotify.Auth
 
-class SpotifyAppRemoteViewModel : ViewModel() {
+class SpotifyAppRemoteViewModel @ViewModelInject constructor(
+    val auth: Auth,
+    val remote: AppRemote
+) : ViewModel() {
 
-    val remote = AppRemote
-
-    init {
-        remote.connectToSpotifyAppRemote()
-    }
+    val myTracks = auth.authStateFlow.map {
+        when (it) {
+            is Auth.State.Code -> TODO()
+            is Auth.State.Token -> remote.connectToSpotifyAppRemote()
+            null -> null
+        }
+    }.launchIn(viewModelScope)
 
     val playerState = remote.playerState.asLiveData()
 
@@ -39,7 +47,7 @@ class SpotifyAppRemoteViewModel : ViewModel() {
     val nowPlayingLibraryState = playerState.switchMap {
         liveData {
             val libraryState: LibraryState? = it?.track?.uri?.let {
-                getLibraryState(it)
+                remote.getLibraryState(it)
             }
             emit(libraryState)
         }
@@ -77,10 +85,6 @@ class SpotifyAppRemoteViewModel : ViewModel() {
 
     val userCapabilities = remote.capabilities.asLiveData()
     val userStatus = remote.userStatus.asLiveData()
-
-
     val playerContext = remote.playerContext.asLiveData()
-
     val recommendedFlow = remote.recommendedFlow().asLiveData()
-
 }

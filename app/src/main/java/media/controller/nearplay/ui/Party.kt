@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import media.controller.nearplay.BuildConfig
 import media.controller.nearplay.R
@@ -20,12 +21,14 @@ import media.controller.nearplay.repository.spotify.AppRemote
 import media.controller.nearplay.viewModels.MainViewModel
 import media.controller.nearplay.viewModels.SpotifyAppRemoteViewModel
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class Party : Fragment(R.layout.fragment_party) {
 
     private val mainViewModel: MainViewModel by viewModels()
     private val remoteVM: SpotifyAppRemoteViewModel by viewModels()
-    private val remote = AppRemote
+    @Inject lateinit var remote: AppRemote
 
     private var currentNightModeStatus: Boolean? = null
     private var observeProgressUpdates: Boolean = true

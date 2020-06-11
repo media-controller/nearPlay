@@ -5,13 +5,12 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import dagger.hilt.android.AndroidEntryPoint
 import media.controller.nearplay.R
-import media.controller.nearplay.databinding.FragmentQueueBinding
+import media.controller.nearplay.databinding.FragmentAlbumBinding
 
 @AndroidEntryPoint
-class Queue : Fragment(R.layout.fragment_queue) {
+class Album : Fragment(R.layout.fragment_album) {
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(FragmentQueueBinding.bind(view)) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(FragmentAlbumBinding.bind(view)) {
 
     }
-
 }

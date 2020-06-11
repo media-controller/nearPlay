@@ -1,19 +1,15 @@
 package media.controller.nearplay.repository.spotify
 
-import android.content.Context
 import com.adamratzman.spotify.SpotifyScope
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object Configuration {
+@Singleton
+class SpotifyConfig @Inject constructor() {
 
-    lateinit var context: Context
-
-    fun injectContext(context: Context) {
-        this.context = context
-    }
-
-    const val CLIENT_ID: String = "d963d5076bb541ea85cb988b3e3d9e7f"
-    const val REDIRECT_URI: String = "nearplay://callback"
-    const val REQUEST_CODE: Int = 7562
+    val CLIENT_ID: String = "d963d5076bb541ea85cb988b3e3d9e7f"
+    val REDIRECT_URI: String = "nearplay://callback"
+    val REQUEST_CODE: Int = 7562
 
     val scopeArray = arrayOf(
         SpotifyScope.APP_REMOTE_CONTROL,
@@ -36,7 +32,6 @@ object Configuration {
         SpotifyScope.USER_READ_RECENTLY_PLAYED,
         SpotifyScope.USER_TOP_READ
     )
-
     val scopeUris = scopeArray.map { it.uri }
 
 }

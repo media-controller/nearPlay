@@ -1,9 +1,8 @@
 package media.controller.nearplay
 
-import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -11,27 +10,26 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.updatePadding
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.asLiveData
 import androidx.navigation.NavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.spotify.sdk.android.auth.AuthorizationClient
 import com.spotify.sdk.android.auth.AuthorizationRequest
 import com.spotify.sdk.android.auth.AuthorizationResponse.Type
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
-import media.controller.nearplay.Configuration.fineLocationPermissionRequestCode
-import media.controller.nearplay.repository.spotify.AppRemote
-import media.controller.nearplay.repository.spotify.Configuration.CLIENT_ID
-import media.controller.nearplay.repository.spotify.Configuration.REDIRECT_URI
-import media.controller.nearplay.repository.spotify.Configuration.REQUEST_CODE
-import media.controller.nearplay.repository.spotify.Configuration.scopeUris
+import media.controller.nearplay.repository.spotify.Auth
+import media.controller.nearplay.repository.spotify.SpotifyConfig
 import media.controller.nearplay.viewModels.MainViewModel
-import media.controller.nearplay.viewModels.SpotifyAppRemoteViewModel
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
 
-    private var currentNavController: LiveData<NavController>? = null
+    @Inject lateinit var auth: Auth
+    @Inject lateinit var spotifyConfig: SpotifyConfig
     private val viewModel: MainViewModel by viewModels()
-    private val remote = AppRemote
-    private val remoteVM: SpotifyAppRemoteViewModel by viewModels()
+    private var currentNavController: LiveData<NavController>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,8 +38,12 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
             setupBottomNavigationBar()
         } // Else, need to wait for onRestoreInstanceState
 
-        remoteVM.playerState.observe(this, Observer {
-            log_in_to_spotify_button.visibility = if (it == null) View.VISIBLE else View.GONE
+        auth.authStateFlow.asLiveData().observe(this, Observer {
+            log_in_to_spotify_button.visibility = when (it) {
+                null                -> View.VISIBLE
+                is Auth.State.Code,
+                is Auth.State.Token -> View.GONE
+            }
         })
     }
 
@@ -107,60 +109,33 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         }
     }
 
-    var connected = false
-
     fun onLogInToSpotifyButtonClicked(view: View) {
-        //requestSpotifyAuthentication(TOKEN)
-
-        if (!connected) {
-            remote.connectToSpotifyAppRemote()
-        } else {
-            remote.disconnect()
-        }
-        connected = !connected
+        requestSpotifyAuthentication(Type.TOKEN)
     }
 
     private fun requestSpotifyAuthentication(type: Type) {
-        val request = AuthorizationRequest.Builder(CLIENT_ID, type, REDIRECT_URI).apply {
-            setScopes(scopeUris.toTypedArray())
-            setShowDialog(false)
-            setCampaign("nearplay")
-            setState("1234567890vSTATE") //TODO: Make secure?
-            setCustomParam("vKey", "vValue")
-        }.build()
+        val request = AuthorizationRequest
+            .Builder(spotifyConfig.CLIENT_ID, type, spotifyConfig.REDIRECT_URI)
+            .setState("123456")
+            .setShowDialog(false)
+            .setScopes(spotifyConfig.scopeUris.toTypedArray())
+            .setCampaign(SpotifyCampaign)
+            .build()
 
-        AuthorizationClient.openLoginActivity(
-            this,
-            REQUEST_CODE,
-            request
-        )
-    }
+        val intent = AuthorizationClient.createLoginActivityIntent(this, request)
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-        // Check if result comes from the correct activity
-        if (requestCode == REQUEST_CODE) { //Spotify Auth Activity
-            //viewModel.setAuthentication(AuthorizationClient.getResponse(resultCode, intent))
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == fineLocationPermissionRequestCode) {
-            // Request for camera permission.
-            if (grantResults.size == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                // Permission has been granted. Start camera preview Activity.
-//                layout.showSnackbar(R.string.camera_permission_granted, Snackbar.LENGTH_SHORT)
-//                startCamera()
-            } else {
-                // Permission request was denied.
-//                layout.showSnackbar(R.string.camera_permission_denied, Snackbar.LENGTH_SHORT)
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            val response = AuthorizationClient.getResponse(it.resultCode, it.data)
+            when (response.type) {
+                Type.CODE  -> auth.authStateFlow.value = Auth.State.Code(response.code, response.state)
+                Type.TOKEN -> auth.authStateFlow.value = Auth.State.Token(response.accessToken, response.expiresIn, response.state)
+                Type.EMPTY,
+                Type.UNKNOWN,
+                Type.ERROR,
+                null       -> response //TODO()
             }
-        }
+        }.launch(intent)
     }
-
 }
+
+const val SpotifyCampaign = "NearPlayCampaign"

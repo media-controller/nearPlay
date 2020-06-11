@@ -5,9 +5,10 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.spotify.android.appremote.api.SpotifyAppRemote
-import media.controller.nearplay.repository.spotify.Configuration
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
+@HiltAndroidApp
 class NearPlayApplication : MultiDexApplication() {
 
     override fun onCreate() {
@@ -18,8 +19,6 @@ class NearPlayApplication : MultiDexApplication() {
         }
 
         SpotifyBroadcastReceiver().register(applicationContext)
-        Configuration.injectContext(applicationContext)
-        media.controller.nearplay.Configuration.injectContext(applicationContext)
 
         setupAppUpdater()
 //        SpotifyRepository.connectToSpotifyAppRemote(applicationContext)

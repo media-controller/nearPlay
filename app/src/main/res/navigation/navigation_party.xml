@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="media.controller.nearplay.AlbumFragment"
+        android:name="media.controller.nearplay.ui.Album"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_album" />
 </navigation>
