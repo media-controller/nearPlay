@@ -1,15 +1,19 @@
 package media.controller.nearplay
 
 import androidx.multidex.MultiDexApplication
+import coil.ImageLoader
+import coil.ImageLoaderFactory
+import coil.util.CoilUtils
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.spotify.android.appremote.api.SpotifyAppRemote
 import dagger.hilt.android.HiltAndroidApp
+import okhttp3.OkHttpClient
 import timber.log.Timber
 
 @HiltAndroidApp
-class NearPlayApplication : MultiDexApplication() {
+class NearPlayApplication : MultiDexApplication(), ImageLoaderFactory {
 
     override fun onCreate() {
         super.onCreate()
@@ -67,6 +71,17 @@ class NearPlayApplication : MultiDexApplication() {
     override fun onTerminate() {
         super.onTerminate()
         Timber.d("App Terminating")
+    }
+
+    override fun newImageLoader(): ImageLoader {
+        return ImageLoader.Builder(applicationContext)
+            .crossfade(true)
+            .okHttpClient {
+                OkHttpClient.Builder()
+                    .cache(CoilUtils.createDefaultCache(applicationContext))
+                    .build()
+            }
+            .build()
     }
 }
 

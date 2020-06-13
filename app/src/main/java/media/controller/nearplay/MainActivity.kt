@@ -19,7 +19,7 @@ import com.spotify.sdk.android.auth.AuthorizationResponse.Type
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import media.controller.nearplay.repository.spotify.Auth
-import media.controller.nearplay.repository.spotify.SpotifyConfig
+import media.controller.nearplay.repository.spotify.Config
 import media.controller.nearplay.viewModels.MainViewModel
 import javax.inject.Inject
 
@@ -27,7 +27,7 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
 
     @Inject lateinit var auth: Auth
-    @Inject lateinit var spotifyConfig: SpotifyConfig
+    @Inject lateinit var config: Config
     private val viewModel: MainViewModel by viewModels()
     private var currentNavController: LiveData<NavController>? = null
 
@@ -44,6 +44,11 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
                 is Auth.State.Code,
                 is Auth.State.Token -> View.GONE
             }
+        })
+
+        auth.spotifyAssociated.asLiveData().observe(this, Observer { spotifyAssociated ->
+            if (spotifyAssociated && auth.authStateFlow.value == null)
+                requestSpotifyAuthentication(Type.TOKEN)
         })
     }
 
@@ -113,12 +118,14 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         requestSpotifyAuthentication(Type.TOKEN)
     }
 
+
+
     private fun requestSpotifyAuthentication(type: Type) {
         val request = AuthorizationRequest
-            .Builder(spotifyConfig.CLIENT_ID, type, spotifyConfig.REDIRECT_URI)
+            .Builder(config.clientID, type, config.redirectURI)
             .setState("123456")
             .setShowDialog(false)
-            .setScopes(spotifyConfig.scopeUris.toTypedArray())
+            .setScopes(config.scopeUris.toTypedArray())
             .setCampaign(SpotifyCampaign)
             .build()
 
@@ -127,8 +134,8 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             val response = AuthorizationClient.getResponse(it.resultCode, it.data)
             when (response.type) {
-                Type.CODE  -> auth.authStateFlow.value = Auth.State.Code(response.code, response.state)
-                Type.TOKEN -> auth.authStateFlow.value = Auth.State.Token(response.accessToken, response.expiresIn, response.state)
+                Type.CODE  -> auth.setAuthState(Auth.State.Code(response.code, response.state))
+                Type.TOKEN -> auth.setAuthState(Auth.State.Token(response.accessToken, response.expiresIn, response.state))
                 Type.EMPTY,
                 Type.UNKNOWN,
                 Type.ERROR,

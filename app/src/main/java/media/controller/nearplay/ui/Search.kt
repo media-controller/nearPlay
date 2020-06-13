@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.*
 import media.controller.nearplay.R
 import media.controller.nearplay.databinding.FragmentSearchBinding
 import media.controller.nearplay.viewModels.SearchViewModel
-import reactivecircus.flowbinding.android.widget.textChangeEvents
+import ru.ldralighieri.corbind.widget.textChangeEvents
 import kotlin.time.ExperimentalTime
 import kotlin.time.milliseconds
 
@@ -24,19 +24,25 @@ class Search : Fragment(R.layout.fragment_search) {
     private val vm: SearchViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(FragmentSearchBinding.bind(view)) {
+
         searchBar.textChangeEvents()
             .debounce(500.milliseconds)
             .map { it.view.text }
             .filter { it.isNotEmpty() }
-            .onEach {
-                vm.search(it.toString())
-            }.launchIn(lifecycleScope)
+            .map { it.toString() }
+            .onEach { vm.search(it) }
+            .launchIn(lifecycleScope)
 
-        vm.searchResults.observe(viewLifecycleOwner, Observer {
-            results.text = it.tracks?.first()?.name
+        vm.searchResults.observe(viewLifecycleOwner, Observer { result ->
+            results.text = result.tracks?.joinToString("\n") {
+                it?.name as CharSequence
+            }
         })
 
-        Unit
+        vm.artistsViews.observe(viewLifecycleOwner, Observer {
+            it
+        })
+
     }
 
 }

@@ -22,11 +22,11 @@ import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
 
 
-@ExperimentalCoroutinesApi
 @Singleton
+@ExperimentalCoroutinesApi
 class AppRemote @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val spotifyConfig: SpotifyConfig
+    private val config: Config
 ) : CoroutineScope {
 
     //<editor-fold desc="Connection Logic">
@@ -80,8 +80,8 @@ class AppRemote @Inject constructor(
     }
 
     private fun defaultConnectionParameters(showAuthView: Boolean = false) = ConnectionParams
-        .Builder(spotifyConfig.CLIENT_ID)
-        .setRedirectUri(spotifyConfig.REDIRECT_URI)
+        .Builder(config.clientID)
+        .setRedirectUri(config.redirectURI)
         .setAuthMethod(AuthMethod.APP_ID)
         .showAuthView(showAuthView)
         //.setRequiredFeatures() TODO: Broken, un-needed?

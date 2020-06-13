@@ -134,21 +134,40 @@ dependencies {
     //Store
     implementation 'com.dropbox.mobile.store:store4:4.0.0-alpha06'
 
-//  Platform FlowBindings
-    implementation "io.github.reactivecircus.flowbinding:flowbinding-android:${flowbindingVersion}"
-//  AndroidX FlowBindings
-    implementation "io.github.reactivecircus.flowbinding:flowbinding-activity:${flowbindingVersion}"
-    implementation "io.github.reactivecircus.flowbinding:flowbinding-appcompat:${flowbindingVersion}"
-    implementation "io.github.reactivecircus.flowbinding:flowbinding-core:${flowbindingVersion}"
-    implementation "io.github.reactivecircus.flowbinding:flowbinding-drawerlayout:${flowbindingVersion}"
-    implementation "io.github.reactivecircus.flowbinding:flowbinding-lifecycle:${flowbindingVersion}"
-    implementation "io.github.reactivecircus.flowbinding:flowbinding-navigation:${flowbindingVersion}"
-    implementation "io.github.reactivecircus.flowbinding:flowbinding-preference:${flowbindingVersion}"
-    implementation "io.github.reactivecircus.flowbinding:flowbinding-recyclerview:${flowbindingVersion}"
-    implementation "io.github.reactivecircus.flowbinding:flowbinding-swiperefreshlayout:${flowbindingVersion}"
-    implementation "io.github.reactivecircus.flowbinding:flowbinding-viewpager:${flowbindingVersion}"
-    implementation "io.github.reactivecircus.flowbinding:flowbinding-viewpager2:${flowbindingVersion}"
-//  Material Components FlowBindings
-    implementation "io.github.reactivecircus.flowbinding:flowbinding-material:${flowbindingVersion}"
+////  Platform FlowBindings
+//    implementation "io.github.reactivecircus.flowbinding:flowbinding-android:${flowbindingVersion}"
+////  AndroidX FlowBindings
+//    implementation "io.github.reactivecircus.flowbinding:flowbinding-activity:${flowbindingVersion}"
+//    implementation "io.github.reactivecircus.flowbinding:flowbinding-appcompat:${flowbindingVersion}"
+//    implementation "io.github.reactivecircus.flowbinding:flowbinding-core:${flowbindingVersion}"
+//    implementation "io.github.reactivecircus.flowbinding:flowbinding-drawerlayout:${flowbindingVersion}"
+//    implementation "io.github.reactivecircus.flowbinding:flowbinding-lifecycle:${flowbindingVersion}"
+//    implementation "io.github.reactivecircus.flowbinding:flowbinding-navigation:${flowbindingVersion}"
+//    implementation "io.github.reactivecircus.flowbinding:flowbinding-preference:${flowbindingVersion}"
+//    implementation "io.github.reactivecircus.flowbinding:flowbinding-recyclerview:${flowbindingVersion}"
+//    implementation "io.github.reactivecircus.flowbinding:flowbinding-swiperefreshlayout:${flowbindingVersion}"
+//    implementation "io.github.reactivecircus.flowbinding:flowbinding-viewpager:${flowbindingVersion}"
+//    implementation "io.github.reactivecircus.flowbinding:flowbinding-viewpager2:${flowbindingVersion}"
+////  Material Components FlowBindings
+//    implementation "io.github.reactivecircus.flowbinding:flowbinding-material:${flowbindingVersion}"
 
+//    Platform bindings:
+    implementation 'ru.ldralighieri.corbind:corbind:1.3.2'
+//    AndroidX library bindings:
+    implementation 'ru.ldralighieri.corbind:corbind-appcompat:1.3.2'
+    implementation 'ru.ldralighieri.corbind:corbind-core:1.3.2'
+    implementation 'ru.ldralighieri.corbind:corbind-drawerlayout:1.3.2'
+    implementation 'ru.ldralighieri.corbind:corbind-leanback:1.3.2'
+    implementation 'ru.ldralighieri.corbind:corbind-navigation:1.3.2'
+    implementation 'ru.ldralighieri.corbind:corbind-recyclerview:1.3.2'
+    implementation 'ru.ldralighieri.corbind:corbind-slidingpanelayout:1.3.2'
+    implementation 'ru.ldralighieri.corbind:corbind-swiperefreshlayout:1.3.2'
+    implementation 'ru.ldralighieri.corbind:corbind-viewpager:1.3.2'
+    implementation 'ru.ldralighieri.corbind:corbind-viewpager2:1.3.2'
+//    Google 'material' library bindings:
+    implementation 'ru.ldralighieri.corbind:corbind-material:1.3.2'
+
+    implementation "com.github.tfcporciuncula:flow-preferences:1.1.0"
+
+    implementation("io.coil-kt:coil:0.11.0")
 }

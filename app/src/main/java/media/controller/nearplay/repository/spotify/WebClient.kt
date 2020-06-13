@@ -9,9 +9,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SpotifyClientWebApi @Inject constructor(
-    private val auth: Auth,
-    private val spotifySpotifyConfig: SpotifyConfig
+class WebClient @Inject constructor(
+    auth: Auth,
+    private val config: Config
 ) {
 
     private val spotifyClientApiMutableStateFlow = MutableStateFlow<SpotifyClientApi?>(null)
@@ -25,8 +25,8 @@ class SpotifyClientWebApi @Inject constructor(
                 is Auth.State.Code  -> TODO()
                 is Auth.State.Token -> {
                     spotifyImplicitGrantApi(
-                        spotifySpotifyConfig.CLIENT_ID,
-                        spotifySpotifyConfig.REDIRECT_URI,
+                        config.clientID,
+                        config.redirectURI,
                         Token(
                             accessToken = it.authToken,
                             tokenType = "Bearer",

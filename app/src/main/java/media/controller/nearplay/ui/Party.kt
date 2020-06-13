@@ -40,7 +40,7 @@ class Party : Fragment(R.layout.fragment_party) {
             nowPlayingAlbumArt.setImageBitmap(albumArt)
         })
 
-        remoteVM.userCapabilities.observe(viewLifecycleOwner, Observer { })
+        remoteVM.userCanPlayOnDemand.observe(viewLifecycleOwner, Observer { })
         remoteVM.userStatus.observe(viewLifecycleOwner, Observer { userStatus ->
             userStatus?.code
             userStatus?.isLoggedIn

@@ -5,13 +5,14 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SpotifyConfig @Inject constructor() {
+@Suppress("SpellCheckingInspection")
+class Config @Inject constructor() {
 
-    val CLIENT_ID: String = "d963d5076bb541ea85cb988b3e3d9e7f"
-    val REDIRECT_URI: String = "nearplay://callback"
-    val REQUEST_CODE: Int = 7562
+    val clientID: String = "d963d5076bb541ea85cb988b3e3d9e7f"
+    val redirectURI: String = "nearplay://callback"
+    val requestCode: Int = 7562
 
-    val scopeArray = arrayOf(
+    private val scopeArray = arrayOf(
         SpotifyScope.APP_REMOTE_CONTROL,
         SpotifyScope.PLAYLIST_MODIFY_PRIVATE,
         SpotifyScope.PLAYLIST_MODIFY_PUBLIC,
